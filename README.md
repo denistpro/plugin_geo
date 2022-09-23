@@ -2,7 +2,7 @@
 plugin for creating new post type and using google maps api
 ===========================================================
 
-This plugin is written for WordPress.
+This plugin is written for WordPress.<br>
 This plugin uses API Google Maps.
 This plugin creates a custom post type called "Experts" with a custom field to enter the expert's address.
 After that, this plugin creates the [expertsmap] shortcode to display a table of experts and a google map with expert markers corresponding to the addresses.
