@@ -147,13 +147,21 @@ class Test{
     // Shortcode for visualizing coordinates of Experts on Google maps
 	add_shortcode( 'expertsmap', 'experts_map_shortcode' );
 
-		function experts_map_shortcode( $atts ){
-		
-		ob_start();	
+		function experts_map_shortcode( $atts ){	
+		ob_start();
+		$params = shortcode_atts( 
+			array( 
+				'width-map' => '640px', 
+				'height-map' => '400px',
+				'width-table' => '640px',
+				'quantity' => -1
+			), 
+			$atts 
+		);	
 		$args = array
 		(
 				'post_type' => 'rg_experts',
-				'posts_per_page' => -1
+				'posts_per_page' => $params['quantity']
 		);
 	
 		$experts = new WP_Query( $args );
@@ -165,36 +173,39 @@ class Test{
 			new Test('John-test','bul. Dobrinova skala 546В, 1359 zh.k. Lyulin 5, Sofia');
 			$experts = new WP_Query( $args );
 		}
-		?>
-		 <table class="table">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Address</th>
-               
-            </tr>
-        </thead>
-        <tbody>
-		<?php
+		
+		
+		echo "<table class='table' style='width:".$params['width-table']."'>";
+		echo<<<EOL
+		<thead>
+			<tr>
+				<th>Name</th>
+				<th>Address</th>
+			</tr>
+		</thead>
+		<tbody>
+		EOL;
+		
 		
 		foreach ($experts->posts as $person):
 		
 			if ($person->post_title){
 			$addr[] = str_replace('"','',get_post_meta( $person->ID, '_my_meta_value_key', true ));
 			$person_name[]=$person->post_title;
-			?> 			
-			<tr>
-				<td><?php echo $person->post_title; ?></td>
-				<td><?php echo get_post_meta( $person->ID, '_my_meta_value_key', true ); ?></td>
+			 			
+			echo '<tr>';
+				echo '<td>'.$person->post_title.'</td>';
+				echo '<td>'.get_post_meta( $person->ID, '_my_meta_value_key', true ).'</td>';
 				
-			</tr>
-			<?php } ?>
-				<?php
-			
-		endforeach;  ?>
-		 </tbody>
-    </table>
-	<div id="map" style="width: 640px; height: 400px;"></div>
+			echo '</tr>';
+			 }
+		endforeach;
+		echo <<<EOL
+		</tbody>
+		</table>
+		EOL;
+	echo '<div id="map"style="width:'.$params["width-map"].'; height:'.$params["height-map"].';"></div>';
+	?>
 	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAxhrKP2nTR9aE-FRMMQ-GQ-03FthtEcaI&callback=initMap" async defer></script>
 	<script >
 			 var map;
@@ -222,16 +233,6 @@ class Test{
 					}
 					
 				}
-
-				// function markersDescription(i){
-				    // var infowindow = new google.maps.InfoWindow();
-					// google.maps.event.addListener(marker, 'click', (function(marker, i) {
-        // return function() {
-        // infowindow.setContent('дурак');
-        // infowindow.open(map, marker);
-        // }
-      // })(marker, i));
-				// }
 				 function getGeoCoder(address, name) {
 				 geocoder.geocode({
 							'address' : address
