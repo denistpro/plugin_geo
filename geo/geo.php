@@ -144,7 +144,7 @@ class someClass {
 	add_shortcode( 'expertsmap', 'experts_map_shortcode' );
 
 		function experts_map_shortcode( $atts ){
-		unset($experts[0]);
+		
 		ob_start();	
 		$args = array
 		(
@@ -176,7 +176,8 @@ class someClass {
 		foreach ($experts->posts as $person):
 		
 			if ($person->post_title){
-			$addr[] = str_replace('"','',get_post_meta( $person->ID, '_my_meta_value_key', true ));			
+			$addr[] = str_replace('"','',get_post_meta( $person->ID, '_my_meta_value_key', true ));
+			$person_name[]=$person->post_title;
 			?> 			
 			<tr>
 				<td><?php echo $person->post_title; ?></td>
@@ -195,6 +196,7 @@ class someClass {
 			 var map;
 			var geo;
 			
+			
 			function initMap() {
 				var opt = {
 				zoom:13,
@@ -208,15 +210,25 @@ class someClass {
 						let icount = addressList.length;
 						console.log('icount ',icount)
 						for (var i = 0; i < icount; i++) {
-						getGeoCoder(addressList[i]);
+						getGeoCoder(addressList[i], personName[i]);
+						
 						}
 					} catch (error) {
 					alert(error);
 					}
+					
 				}
 
-				
-				 function getGeoCoder(address) {
+				// function markersDescription(i){
+				    // var infowindow = new google.maps.InfoWindow();
+					// google.maps.event.addListener(marker, 'click', (function(marker, i) {
+        // return function() {
+        // infowindow.setContent('дурак');
+        // infowindow.open(map, marker);
+        // }
+      // })(marker, i));
+				// }
+				 function getGeoCoder(address, name) {
 				 geocoder.geocode({
 							'address' : address
 				 }, function(results, status) {
@@ -225,21 +237,31 @@ class someClass {
 					var p = results[0].geometry.location;
 					var lat=p.lat();
                     var lng=p.lng();
-                    createMarker(address,lat,lng);
+                    createMarker(address,lat,lng, name);
 				} else {
                 geterrorMgs(address); // address not found handler
 				}
                    });
                   }
-				 function createMarker(add,lat,lng) {
+				 function createMarker(add,lat,lng,name) {
 				     var contentString = add;
-                     var marker = new google.maps.Marker({
+					 var pName = name;
+                     marker = new google.maps.Marker({
                          position: new google.maps.LatLng(lat,lng),
                          map: map,
                      });
-
+					 var bounds = new google.maps.LatLngBounds();
+					 var infowindow = new google.maps.InfoWindow({
+						 ariaLabel: pName,
+						 content: '<p><b>'+pName+'</b></p>'+contentString
+					});
+					google.maps.event.addListener(marker, 'click', function() {
+					infowindow.open(map, marker);
+					});
+					bounds.extend(marker.position);
 				}
-	var addressList = <?php echo '["' . implode('", "', $addr) . '"]' ?>;
+	var addressList = <?php echo '["' . implode('", "', $addr) . '"]'; ?>;
+	var personName = <?php echo '["' . implode('", "', $person_name) . '"]';  ?>
 	
 	setTimeout(() => {
     codeAddress(addressList);
