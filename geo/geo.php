@@ -125,7 +125,11 @@ class someClass {
 		echo ' value="' . esc_attr( $value ) . '" size="25" />';
 		
 	}
-	public function add_posts_for_test($name, $address) 
+	
+
+} 
+class Test{
+	public function __construct($name, $address) 
 	{
 		$post_data = array
 		(
@@ -138,8 +142,8 @@ class someClass {
 		wp_insert_post( wp_slash($post_data) );
 		
 	}
+}
 
-} 
     // Shortcode for visualizing coordinates of Experts on Google maps
 	add_shortcode( 'expertsmap', 'experts_map_shortcode' );
 
@@ -155,10 +159,10 @@ class someClass {
 		$experts = new WP_Query( $args );
 		if ($experts->posts == null)
 		{
-			someClass::add_posts_for_test('Den-test','g.k. Lyulin 5 512В, 1359 zh.k. Lyulin 5, Sofia');
-			someClass::add_posts_for_test('Mike-test','D-r, bul. "Doctor Peter Dertliev" 104, 1336 zh.k. Lyulin 5, Sofia');
-			someClass::add_posts_for_test('Bob-test','ul. Nikola Belovezhdov 1, 1359 zh.k. Lyulin 4, Sofia');
-			someClass::add_posts_for_test('John-test','bul. Dobrinova skala 546В, 1359 zh.k. Lyulin 5, Sofia');
+			new Test('Den-test','g.k. Lyulin 5 512В, 1359 zh.k. Lyulin 5, Sofia');
+			new Test('Mike-test','D-r, bul. "Doctor Peter Dertliev" 104, 1336 zh.k. Lyulin 5, Sofia');
+			new Test('Bob-test','ul. Nikola Belovezhdov 1, 1359 zh.k. Lyulin 4, Sofia');
+			new Test('John-test','bul. Dobrinova skala 546В, 1359 zh.k. Lyulin 5, Sofia');
 			$experts = new WP_Query( $args );
 		}
 		?>
