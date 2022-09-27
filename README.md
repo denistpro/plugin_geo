@@ -8,7 +8,7 @@ This plugin creates a custom post type called "Experts" with a custom field to e
 After that, this plugin creates the [expertsmap] shortcode to display a table of experts and a google map with expert markers corresponding to the addresses.<br>
 <hr>
 Default parameters:<br>
-google-maps-api-key = XXXXXXXXXXXXX
+google-maps-api-key = XXXXXXXXXXXXX<br>
 width-map = 640px  // map width<br>
 height-map = 400px // map height<br>
 width-table = 640px // table width<br>
