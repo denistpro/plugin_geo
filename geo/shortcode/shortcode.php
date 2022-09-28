@@ -28,15 +28,8 @@
 		}
 		if ($params["google-maps-api-key"])
 		{
-			$strurl = 'https://maps.googleapis.com/maps/api/js?key='.$params["google-maps-api-key"].'&callback=initMap';
-			try{
-				wp_enqueue_script('google-maps',$strurl);
-			} 
-			catch (Exception $e)
-			{
-				echo 'Enter valid Google API key!',$e;
-			}
-			
+			$strurl = 'https://maps.googleapis.com/maps/api/js?key='.$params["google-maps-api-key"].'&callback=initMap';			
+			wp_enqueue_script('google-maps',$strurl);
 		}
 		else
 		{
