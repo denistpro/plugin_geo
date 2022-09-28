@@ -23,10 +23,7 @@
 		$experts = new WP_Query( $args );
 		if ($experts->posts == null)
 		{
-			new Test('Den-test','g.k. Lyulin 5 512В, 1359 zh.k. Lyulin 5, Sofia');
-			new Test('Mike-test','D-r, bul. "Doctor Peter Dertliev" 104, 1336 zh.k. Lyulin 5, Sofia');
-			new Test('Bob-test','ul. Nikola Belovezhdov 1, 1359 zh.k. Lyulin 4, Sofia');
-			new Test('John-test','bul. Dobrinova skala 546В, 1359 zh.k. Lyulin 5, Sofia');
+			new Test();
 			$experts = new WP_Query( $args );
 		}
 		
