@@ -14,7 +14,6 @@ function call_mainClass() {
 	new mainClass();
 	
 }
-wp_enqueue_script('fetch-inject',GEO__PLUGIN_DIR.'/shortcode/fetch-inject/fetch-inject.min.js');
 if ( is_admin() ) {
 	add_action( 'load-post.php', 'call_mainClass' );
 	add_action( 'load-post-new.php', 'call_mainClass' );
