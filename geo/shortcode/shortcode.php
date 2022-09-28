@@ -58,15 +58,6 @@
 		</table>
 		EOL;
 	echo '<div id="map"style="width:'.$params["width-map"].'; height:'.$params["height-map"].';"></div>';
-	// function for script defer attribute
-	function geo_defer_attribute( $tag, $handle ) {
-    if ( 'google-maps' !== $handle ) {
-        return $tag;
-    }
-	
-    return str_replace( ' src', ' defer="defer" src', $tag );
-}
-	add_filter( 'script_loader_tag', 'geo_defer_attribute', 10, 2 );
 	$strurl = 'https://maps.googleapis.com/maps/api/js?key='.$params["google-maps-api-key"].'&callback=initMap';
 	wp_enqueue_script('google-maps',$strurl);
 	?>
