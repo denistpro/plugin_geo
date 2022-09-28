@@ -26,8 +26,22 @@
 			new Test();
 			$experts = new WP_Query( $args );
 		}
-		
-		
+		if ($params["google-maps-api-key"])
+		{
+			$strurl = 'https://maps.googleapis.com/maps/api/js?key='.$params["google-maps-api-key"].'&callback=initMap';
+			try{
+				wp_enqueue_script('google-maps',$strurl);
+			} 
+			catch (Exception $e)
+			{
+				echo 'Enter valid Google API key!',$e;
+			}
+			
+		}
+		else
+		{
+			return ('Your Google API key is empty');
+		}
 		echo "<table class='table' style='width:".$params['width-table']."'>";
 		echo<<<EOL
 		<thead>
@@ -58,8 +72,6 @@
 		</table>
 		EOL;
 	echo '<div id="map"style="width:'.$params["width-map"].'; height:'.$params["height-map"].';"></div>';
-	$strurl = 'https://maps.googleapis.com/maps/api/js?key='.$params["google-maps-api-key"].'&callback=initMap';
-	wp_enqueue_script('google-maps',$strurl);
 	?>
 	<script>
 			 var map;
@@ -74,7 +86,8 @@
 				map=new google.maps.Map(document.getElementById("map"),opt);
 				geocoder = new google.maps.Geocoder();
 			}
-				function codeAddress(addressList) {
+			function gm_authFailure() { alert('Yout Google API key is not valid!'); }
+			function codeAddress(addressList) {
 					try {
 						let icount = addressList.length;
 						console.log('icount ',icount)
@@ -86,8 +99,8 @@
 					alert(error);
 					}
 					
-				}
-				 function getGeoCoder(address, name) {
+			}
+			function getGeoCoder(address, name) {
 				 geocoder.geocode({
 							'address' : address
 				 }, function(results, status) {
@@ -101,8 +114,8 @@
                 geterrorMgs(address); // address not found handler
 				}
                    });
-                  }
-				 function createMarker(add,lat,lng,name) {
+             }
+			 function createMarker(add,lat,lng,name) {
 				     var contentString = add;
 					 var pName = name;
                      marker = new google.maps.Marker({
@@ -118,7 +131,7 @@
 					infowindow.open(map, marker);
 					});
 					bounds.extend(marker.position);
-				}
+			 }
 	var addressList = <?php echo '["' . implode('", "', $addr) . '"]'; ?>;
 	var personName = <?php echo '["' . implode('", "', $person_name) . '"]';  ?>
 	
