@@ -12,6 +12,7 @@ google-maps-api-key = XXXXXXXXXXXXX<br>
 width-map = 640px  // map width<br>
 height-map = 400px // map height<br>
 width-table = 640px // table width<br>
+zoom = 13 // maps zoom (0-18)<br>
 quantity =all // Number of experts in the table and on the map - all<br>
 <hr>
 You can change these parameters.<br>
