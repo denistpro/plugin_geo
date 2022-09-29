@@ -1,19 +1,19 @@
 <?php
 class createExpertPostType {
 
-    function __construct() {
-
+    function __construct() 
+	{
         add_action( 'init', array( $this, 'create_post_type' ) );
-
     }
-
-    function create_post_type() {
-
+    function create_post_type() 
+	{
         $name = 'Experts';
         $singular_name = 'Expert';
-        register_post_type( 
+        register_post_type
+		( 
             'rg_' . strtolower( $name ),
-            array(
+            array
+			(
                 'labels' => array(
                     'name'               => _x( $name, 'post type general name' ),
                     'singular_name'      => _x( $singular_name, 'post type singular name'),
@@ -44,9 +44,7 @@ class createExpertPostType {
                  'menu_position'         => 8
             )
         );
-
     }
-
 }
-$my_class = new createExpertPostType();
+new createExpertPostType();
 ?>
