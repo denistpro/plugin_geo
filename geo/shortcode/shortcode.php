@@ -57,7 +57,7 @@
 			echo '<tr>';
 				echo '<td>'.$person->post_title.'</td>';
 				echo '<td>'.get_post_meta( $person->ID, '_my_meta_value_key', true ).'</td>';
-				echo '<td><a id="per'.$countPerson.'" style="cursor: pointer;">Find it</a></td>';
+				echo '<td><a id="per'.$countPerson.'" onclick="clickPer('.$countPerson.')" style="cursor: pointer;">Find it</a></td>';
 				
 			echo '</tr>';
 			 }
@@ -73,8 +73,8 @@
 			var map;
 			var geo;
 			var elem =[];
-			var addressList = <?php echo '["' . implode('", "', $addr) . '"]'; ?>;
-			var personName = <?php echo '["' . implode('", "', $person_name) . '"]';  ?>;
+			const addressList = <?php echo '["' . implode('", "', $addr) . '"]'; ?>;
+			const personName = <?php echo '["' . implode('", "', $person_name) . '"]';  ?>;
 			var coordArr=[];
 			let markers = [];
 			function initMap() {
@@ -84,12 +84,12 @@
 				}
 				map=new google.maps.Map(document.getElementById("map"),opt);
 				geocoder = new google.maps.Geocoder();
+				codeAddress(addressList);
 			}
 			function gm_authFailure() { alert('Yout Google API key is not valid!'); }
 			function codeAddress(addressList) {
 					try {
 						var icount = addressList.length;
-						console.log('icount ',icount);
 						for (var i = 0; i < icount; i++) {
 						getGeoCoder(addressList[i], personName[i]);
 						elem[i]=document.getElementById('per'+ i);
@@ -121,25 +121,35 @@
 					 var pName = name;                    
 					 marker = new google.maps.Marker({
                          position: new google.maps.LatLng(lat,lng),
-						 //animation: google.maps.Animation.BOUNCE,
+						
                          map: map,
                      });
 					 
-					 // var bounds = new google.maps.LatLngBounds();
-					 // var infowindow = new google.maps.InfoWindow({
-						 // ariaLabel: pName,
-						 // content: '<p><b>'+pName+'</b></p>'+contentString
-					// });
-					// google.maps.event.addListener(markers[], 'click', function() {
-					    // infowindow.open(map, marker);
+					 var bounds = new google.maps.LatLngBounds();
+					 var infowindow = new google.maps.InfoWindow({
+						 ariaLabel: pName,
+						 content: '<p><b>'+pName+'</b></p>'+contentString
+					});
+					google.maps.event.addListener(marker, 'click', function(e) {
+					    
+						infowindow.open({
+						anchor: this,
+						map,
+						shouldFocus: true,
+						
+
+						});
+						if (this.getAnimation() !== null) {
+						this.setAnimation(null);
+  
+						}
 					
-					// });
-					// bounds.extend(marker.position);
+					});
+					bounds.extend(marker.position);
+					
 					markers.push(marker);
 			 }
-setTimeout(() => {
-    codeAddress(addressList);
-    
+
 	function clickPer(num)
 	{
 					console.log('coordArr ',coordArr[0]);
@@ -154,11 +164,7 @@ setTimeout(() => {
 						}
 					}
 	}
-	for (var x = 0; x < addressList.length; x++) { 
-		 elem[x].addEventListener('click',clickPer.bind(null,x));
-		 
-	  }
-	  }, 3000);
+
     </script>
 		
 	<?php
