@@ -1,25 +1,25 @@
 <?php
 class mainClass {
-
 	/**
 	 * We install hooks at the time of class initialization.
 	 */
-	public function __construct() {
+    public function __construct() 
+	{
 		add_action( 'add_meta_boxes', array( $this, 'add_meta_box' ) );
 		add_action( 'save_post', array( $this, 'save' ) );
-		
 	}
 
 	/**
 	 * Adding an extra block.
 	 */
-	public function add_meta_box( $post_type ){
-
-			// Set the types of posts to which the block will be added
+	public function add_meta_box( $post_type )
+	{
+		// Set the types of posts to which the block will be added
 		$post_types = array('rg_experts');
-
-		if ( in_array( $post_type, $post_types )) {
-			add_meta_box(
+		if ( in_array( $post_type, $post_types )) 
+		{
+			add_meta_box
+			(
 				'some_meta_box_name',
 				__( 'Address', 'geo_textdomain' ),
 				array( $this, 'render_meta_box_content' ),
@@ -29,7 +29,6 @@ class mainClass {
 			);
 		}
 	}
-
 	/**
 	 * We save data when saving a post.
 	 *
@@ -37,19 +36,14 @@ class mainClass {
 	 */
 	public function save( $post_id ) 
 	{
-
 		/*
 		 * We need to do a check to make sure the request came from our page,
 		 * because save_post can be called anywhere else.
 		 */
-
 		// Check if nonce is set.
-		if ( ! isset( $_POST['geo_inner_custom_box_nonce'] ) )
-			return $post_id;
-   
- 
+		if ( ! isset( $_POST['geo_inner_custom_box_nonce'] ) ) return $post_id;
 		$nonce = $_POST['geo_inner_custom_box_nonce'];
-
+		
 		// Check if the nonce is correct.
 		if ( ! wp_verify_nonce( $nonce, 'geo_inner_custom_box' ) )
 			return $post_id;
@@ -62,26 +56,22 @@ class mainClass {
 		if ( 'rg_experts' == $_POST['post_type'] ) 
 		{
 
-			if ( ! current_user_can( 'edit_page', $post_id ) )
-				return $post_id;
+		if ( ! current_user_can( 'edit_page', $post_id ) ) return $post_id;
 
-		}    else {
+		} else {
 
-			if ( ! current_user_can( 'edit_post', $post_id ) )
+		if ( ! current_user_can( 'edit_post', $post_id ) )
 				return $post_id;
 		}
 
-		// OK, everything is clean, you can save the data.
+		// OK, everything is clean, we can save the data.
 
 		// Clearing the input field.
 		$mydata = sanitize_text_field( $_POST['geo_new_field'] );
 
 		// We update the data.
 		
-
-		
 		update_post_meta( $post_id, '_my_meta_value_key', $mydata );
-		
 		
 	}
 
@@ -104,10 +94,7 @@ class mainClass {
 		echo __( 'Expert address', 'geo_textdomain' );
 		echo '</label> ';
 		echo '<input type="text" id="geo_new_field" name="geo_new_field"';
-		echo ' value="' . esc_attr( $value ) . '" size="25" />';
-		
+		echo ' value="' . esc_attr( $value ) . '" size="25" />';		
 	}
-	
-
 }
 ?>
