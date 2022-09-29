@@ -119,7 +119,7 @@
 			 function createMarker(add,lat,lng,name) {
 				     var contentString = add;
 					 var pName = name;                    
-					 marker = new google.maps.Marker({
+					 var marker = new google.maps.Marker({
                          position: new google.maps.LatLng(lat,lng),
 						
                          map: map,
