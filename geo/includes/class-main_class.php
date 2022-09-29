@@ -94,7 +94,7 @@ class mainClass {
 		echo __( 'Expert address', 'geo_textdomain' );
 		echo '</label> ';
 		echo '<input type="text" id="geo_new_field" name="geo_new_field"';
-		echo ' value="' . esc_attr( $value ) . '" size="25" />';		
+		echo ' value="' . esc_attr( $value ) . '" size="100%" />';		
 	}
 }
 ?>
