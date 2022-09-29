@@ -75,8 +75,8 @@
 			var elem =[];
 			var addressList = <?php echo '["' . implode('", "', $addr) . '"]'; ?>;
 			var personName = <?php echo '["' . implode('", "', $person_name) . '"]';  ?>;
-			var addressListArr = addressList;
 			var coordArr=[];
+			let markers = [];
 			function initMap() {
 				var opt = {
 				zoom:13,
@@ -118,20 +118,24 @@
              }
 			 function createMarker(add,lat,lng,name) {
 				     var contentString = add;
-					 var pName = name;
-                     marker = new google.maps.Marker({
+					 var pName = name;                    
+					 marker = new google.maps.Marker({
                          position: new google.maps.LatLng(lat,lng),
+						 //animation: google.maps.Animation.BOUNCE,
                          map: map,
                      });
-					 var bounds = new google.maps.LatLngBounds();
-					 var infowindow = new google.maps.InfoWindow({
-						 ariaLabel: pName,
-						 content: '<p><b>'+pName+'</b></p>'+contentString
-					});
-					google.maps.event.addListener(marker, 'click', function() {
-					infowindow.open(map, marker);
-					});
-					bounds.extend(marker.position);
+					 
+					 // var bounds = new google.maps.LatLngBounds();
+					 // var infowindow = new google.maps.InfoWindow({
+						 // ariaLabel: pName,
+						 // content: '<p><b>'+pName+'</b></p>'+contentString
+					// });
+					// google.maps.event.addListener(markers[], 'click', function() {
+					    // infowindow.open(map, marker);
+					
+					// });
+					// bounds.extend(marker.position);
+					markers.push(marker);
 			 }
 setTimeout(() => {
     codeAddress(addressList);
@@ -139,10 +143,20 @@ setTimeout(() => {
 	function clickPer(num)
 	{
 					console.log('coordArr ',coordArr[0]);
-					map.setCenter(coordArr[num]);
+					map.panTo(coordArr[num]);
+					for (var x = 0; x < markers.length; x++){
+						if (x == num)
+						{
+						markers[x].setAnimation(google.maps.Animation.BOUNCE);
+						
+						} else{
+							markers[x].setAnimation(google.maps.Animation.DROP);
+						}
+					}
 	}
 	for (var x = 0; x < addressList.length; x++) { 
 		 elem[x].addEventListener('click',clickPer.bind(null,x));
+		 
 	  }
 	  }, 3000);
     </script>
