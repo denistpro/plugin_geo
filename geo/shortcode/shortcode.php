@@ -41,24 +41,27 @@
 			<tr>
 				<th>Name</th>
 				<th>Address</th>
+				<th>Positions</th>
 			</tr>
 		</thead>
 		<tbody>
 		EOL;
 		
-		
+		$countPerson =0;
 		foreach ($experts->posts as $person):
-		
 			if ($person->post_title){
-			$addr[] = str_replace('"','',get_post_meta( $person->ID, '_my_meta_value_key', true ));
+			$addr[] = str_replace(array('"',','),'',get_post_meta( $person->ID, '_my_meta_value_key', true ));
+			
 			$person_name[]=$person->post_title;
 			 			
 			echo '<tr>';
 				echo '<td>'.$person->post_title.'</td>';
 				echo '<td>'.get_post_meta( $person->ID, '_my_meta_value_key', true ).'</td>';
+				echo '<td><a id="per'.$countPerson.'">Find it</a></td>';
 				
 			echo '</tr>';
 			 }
+			$countPerson++; 
 		endforeach;
 		echo <<<EOL
 		</tbody>
@@ -67,10 +70,13 @@
 	echo '<div id="map"style="width:'.$params["width-map"].'; height:'.$params["height-map"].';"></div>';
 	?>
 	<script>
-			 var map;
+			var map;
 			var geo;
-			
-			
+			var elem =[];
+			var addressList = <?php echo '["' . implode('", "', $addr) . '"]'; ?>;
+			var personName = <?php echo '["' . implode('", "', $person_name) . '"]';  ?>;
+			var addressListArr = addressList;
+			var coordArr=[];
 			function initMap() {
 				var opt = {
 				zoom:13,
@@ -82,24 +88,26 @@
 			function gm_authFailure() { alert('Yout Google API key is not valid!'); }
 			function codeAddress(addressList) {
 					try {
-						let icount = addressList.length;
-						console.log('icount ',icount)
+						var icount = addressList.length;
+						console.log('icount ',icount);
 						for (var i = 0; i < icount; i++) {
 						getGeoCoder(addressList[i], personName[i]);
-						
+						elem[i]=document.getElementById('per'+ i);
 						}
+						
 					} catch (error) {
 					alert(error);
 					}
 					
 			}
-			function getGeoCoder(address, name) {
+			function getGeoCoder(address, name=null) {
 				 geocoder.geocode({
 							'address' : address
 				 }, function(results, status) {
 					if (status == "OK") {
-					map.setCenter(results[0].geometry.location);
 					var p = results[0].geometry.location;
+					coordArr.push(p);
+					map.setCenter(p);
 					var lat=p.lat();
                     var lng=p.lng();
                     createMarker(address,lat,lng, name);
@@ -125,12 +133,18 @@
 					});
 					bounds.extend(marker.position);
 			 }
-	var addressList = <?php echo '["' . implode('", "', $addr) . '"]'; ?>;
-	var personName = <?php echo '["' . implode('", "', $person_name) . '"]';  ?>
-	
-	setTimeout(() => {
+setTimeout(() => {
     codeAddress(addressList);
-    }, 3000)
+    
+	function clickPer(num)
+	{
+					console.log('coordArr ',coordArr[0]);
+					map.setCenter(coordArr[num]);
+	}
+	for (var x = 0; x < addressList.length; x++) { 
+		 elem[x].addEventListener('click',clickPer.bind(null,x));
+	  }
+	  }, 3000);
     </script>
 		
 	<?php
