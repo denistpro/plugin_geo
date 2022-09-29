@@ -10,7 +10,8 @@
 				'width-map' => '640px', 
 				'height-map' => '400px',
 				'width-table' => '640px',
-				'quantity' => -1
+				'zoom' => 13, // zoom param (recommends 0-18)
+				'quantity' => -1 // number of experts
 			), 
 			$atts 
 		);	
@@ -79,7 +80,7 @@
 			let markers = [];
 			function initMap() {
 				var opt = {
-				zoom:13,
+				zoom:<?php echo $params["zoom"]; ?>,
 				mapTypeId : google.maps.MapTypeId.ROADMAP
 				}
 				map=new google.maps.Map(document.getElementById("map"),opt);
