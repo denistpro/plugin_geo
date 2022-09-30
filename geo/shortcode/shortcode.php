@@ -71,7 +71,7 @@
 		echo '<div id="map"style="width:'.$params["width-map"].'; height:'.$params["height-map"].';"></div>';
 ?>
 	<!-- main script for google maps api -->
-	<script>
+	<script defer>
 			var map;
 			var geo;
 			const addressList = <?php echo '["' . implode('", "', $addr) . '"]'; ?>;
@@ -149,7 +149,6 @@
 // function for html links
 	function clickPer(num)
 	{
-					console.log('coordArr ',coordArr[0]);
 					map.panTo(coordArr[num]);
 					for (var x = 0; x < markers.length; x++){
 						if (x == num)
