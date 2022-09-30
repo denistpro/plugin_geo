@@ -32,7 +32,7 @@
 		if ($params["google-maps-api-key"])
 		{
 			$strurl = 'https://maps.googleapis.com/maps/api/js?key='.$params["google-maps-api-key"].'&callback=initMap';			
-			wp_enqueue_script('google-maps',$strurl,array(),time(),false);
+		wp_enqueue_script('google-maps',$strurl,array(),time(),false);
 		}
 		else
 		{
@@ -71,7 +71,7 @@
 		echo '<div id="map"style="width:'.$params["width-map"].'; height:'.$params["height-map"].';"></div>';
 ?>
 	<!-- main script for google maps api -->
-	<script defer>
+	<script>
 			var map;
 			var geo;
 			const addressList = <?php echo '["' . implode('", "', $addr) . '"]'; ?>;
@@ -95,7 +95,7 @@
 					try {
 						var icount = addressList.length;
 						for (var i = 0; i < icount; i++) {
-						getGeoCoder(addressList[i], personName[i]);
+						getGeoCoder(addressList[i], personName[i], i);
 						}
 						
 					} catch (error) 
@@ -103,24 +103,24 @@
 					alert(error);
 					}
 			}
-			function getGeoCoder(address, name) {
+			function getGeoCoder(address, name, num) {
 				 geocoder.geocode
 				 ({	'address' : address }, 
 					function(results, status) {
 						if (status == "OK") {
 						var p = results[0].geometry.location;
-						coordArr.push(p);
+						coordArr[num]=p;
 						map.setCenter(p);
 						var lat=p.lat();
 						var lng=p.lng();
-						createMarker(address,lat,lng, name);
+						createMarker(address,lat,lng, name, num);
 						} else {
 						geterrorMgs(address); // address not found handler
 						}
 					}
 				  );
              }
-			 function createMarker(add,lat,lng,name) {
+			 function createMarker(add,lat,lng,name,num) {
 				     var contentString = add;
 					 var pName = name;                    
 					 var marker = new google.maps.Marker({
@@ -132,8 +132,8 @@
 						 ariaLabel: pName,
 						 content: '<p><b>'+pName+'</b></p>'+contentString
 					});
-				 	markers.push(marker);
-				 	infowindow.close({
+					markers[num]=marker;
+					infowindow.close({
 						anchor: this,
 						map,
 					});
@@ -147,14 +147,15 @@
 						this.setAnimation(null);
   
 						}
-					});
+					});					
 					bounds.extend(marker.position);
+					
 			 }
 // function for html links
 	function clickPer(num)
 	{
 					map.panTo(coordArr[num]);
-					for (var x = 0; x < markers.length; x++){
+					for (var x = 0; x < addressList.length; x++){
 						if (x == num)
 						{
 						markers[x].setAnimation(google.maps.Animation.BOUNCE);
