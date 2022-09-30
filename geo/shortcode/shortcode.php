@@ -32,7 +32,7 @@
 		if ($params["google-maps-api-key"])
 		{
 			$strurl = 'https://maps.googleapis.com/maps/api/js?key='.$params["google-maps-api-key"].'&callback=initMap';			
-			wp_enqueue_script('google-maps',$strurl);
+			wp_enqueue_script('google-maps',$strurl,array(),time(),false);
 		}
 		else
 		{
@@ -132,6 +132,11 @@
 						 ariaLabel: pName,
 						 content: '<p><b>'+pName+'</b></p>'+contentString
 					});
+				 	markers.push(marker);
+				 	infowindow.close({
+						anchor: this,
+						map,
+					});
 					google.maps.event.addListener(marker, 'click', function(e) {
 						infowindow.open({
 						anchor: this,
@@ -144,7 +149,6 @@
 						}
 					});
 					bounds.extend(marker.position);
-					markers.push(marker);
 			 }
 // function for html links
 	function clickPer(num)
