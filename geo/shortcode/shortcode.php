@@ -59,7 +59,7 @@
 				echo '<tr>';
 					echo '<td>'.$person->post_title.'</td>';
 					echo '<td>'.get_post_meta( $person->ID, '_my_meta_value_key', true ).'</td>';
-					echo '<td><a id="per'.$countPerson.'" onclick="clickPer('.$countPerson.')" style="cursor: pointer;">Find it</a></td>';
+					echo '<td><a id="per'.$countPerson.'" onclick="clickPer('.$countPerson.')" style="cursor: pointer;" href="#map">Find it</a></td>';
 				echo '</tr>';
 			 }
 		$countPerson++; 
