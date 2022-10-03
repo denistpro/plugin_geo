@@ -8,6 +8,7 @@ Author:      Denis Tikhonov
 define( 'GEO__PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 
 require_once (GEO__PLUGIN_DIR. '/includes/class-geo_activator.php');
+new createExpertPostType();
 require_once (GEO__PLUGIN_DIR. '/includes/class-features.php');
 require_once (GEO__PLUGIN_DIR. '/includes/class-main_class.php');
 function call_mainClass() {
