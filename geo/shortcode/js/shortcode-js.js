@@ -1,15 +1,15 @@
-var map;
-			var geo;
-			var addressList = JSON.parse(document.getElementById("map").getAttribute('data-addresslist'));
-			var personName = JSON.parse(document.getElementById("map").getAttribute('data-personname'));
-			var zoompar = Math.floor(document.getElementById("map").getAttribute('zoom'));
-			var coordArr=[];
-			var markers = [];
-			var ver;
+let map;
+			let geo;
+			let addressList = JSON.parse(document.getElementById("map").getAttribute('data-addresslist'));
+			let personName = JSON.parse(document.getElementById("map").getAttribute('data-personname'));
+			let zoompar = Math.floor(document.getElementById("map").getAttribute('zoom'));
+			let coordArr=[];
+			let markers = [];
+			let ver;
 			function initMap()
 			{
 				
-				var opt =
+				let opt =
 				{
 					zoom:zoompar,
 					mapTypeId : google.maps.MapTypeId.ROADMAP
@@ -22,8 +22,8 @@ var map;
 			function codeAddress(addressList) 
 			{
 					try {
-						var icount = addressList.length;
-						for (var i = 0; i < icount; i++) {
+						let icount = addressList.length;
+						for (let i = 0; i < icount; i++) {
 						getGeoCoder(addressList[i], personName[i], i);
 						}
 						
@@ -37,11 +37,11 @@ var map;
 				 ({	'address' : address }, 
 					function(results, status) {
 						if (status == "OK") {
-						var p = results[0].geometry.location;
+						let p = results[0].geometry.location;
 						coordArr[num]=p;
 						map.setCenter(p);
-						var lat=p.lat();
-						var lng=p.lng();
+						let lat=p.lat();
+						let lng=p.lng();
 						createMarker(address,lat,lng, name, num);
 						} else {
 						geterrorMgs(address); // address not found handler
@@ -50,14 +50,14 @@ var map;
 				  );
              }
 			 function createMarker(add,lat,lng,name,num) {
-				     var contentString = add;
-					 var pName = name;                    
-					 var marker = new google.maps.Marker({
+				     let contentString = add;
+					 let pName = name;                    
+					 let marker = new google.maps.Marker({
                          position: new google.maps.LatLng(lat,lng),
                          map: map,
                      });
-					 var bounds = new google.maps.LatLngBounds();
-					 var infowindow = new google.maps.InfoWindow({
+					 let bounds = new google.maps.LatLngBounds();
+					 let infowindow = new google.maps.InfoWindow({
 						 ariaLabel: pName,
 						 content: '<p><b>'+pName+'</b></p>'+contentString
 					});
@@ -84,7 +84,7 @@ var map;
 	function clickPer(num)
 	{
 					map.panTo(coordArr[num]);
-					for (var x = 0; x < addressList.length; x++){
+					for (let x = 0; x < addressList.length; x++){
 						if (x == num)
 						{
 						markers[x].setAnimation(google.maps.Animation.BOUNCE);
